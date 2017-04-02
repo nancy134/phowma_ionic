@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Contact
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
+      <div class="item-note" item-left>
+        {{item.name}}
+      </div>
+      <ion-icon name="{{item.icon1}}" item-right class="star" [style.color]="item.color1"></ion-icon>
+      <ion-icon name="{{item.icon2}}" item-right class="star" [style.color]="item.color2"></ion-icon>
+      <ion-icon name="{{item.icon3}}" item-right class="star" [style.color]="item.color3"></ion-icon>
+      <ion-icon name="{{item.icon4}}" item-right class="star" [style.color]="item.color4"></ion-icon>
+      <ion-icon name="{{item.icon5}}" item-right class="star" [style.color]="item.color5"></ion-icon>
+    </button>
+  </ion-list>
+</ion-content>
