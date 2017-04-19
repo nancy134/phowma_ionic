@@ -38,12 +38,13 @@ export class ContactPage {
         options.filter = '';
         options.multiple = true;
         options.hasPhoneNumber = false;
-        const desiredFields: ContactFieldType[] = ['name', 'addresses', 'phoneNumbers'];
+        const desiredFields: ContactFieldType[] = ['id', 'name', 'addresses', 'phoneNumbers'];
         options.desiredFields = desiredFields; 
         const fields: ContactFieldType[] = ['name'];
         Contacts.find(fields, options).then(contacts => {
             for (let i=0; i<contacts.length; i++){
                 console.log("name: "+contacts[i].name.formatted);
+                console.log("id: "+contacts[i].id);
                 var state = '';
 
                 // Find state in address
