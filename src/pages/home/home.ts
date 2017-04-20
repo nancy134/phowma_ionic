@@ -12,5 +12,8 @@ export class HomePage {
         console.log("HomePage:constructor");
     
     }
+    signIn(){
+        console.log("Sign In Clicked");
+    }
 
 }
