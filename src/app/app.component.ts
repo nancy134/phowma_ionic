@@ -4,22 +4,22 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { TabsPage } from '../pages/tabs/tabs';
 import { StateService } from '../providers/state-service';
-import { AreaCode } from '../providers/area-code';
-import { Auth } from '../providers/auth';
+import { AreaCodeService } from '../providers/area-code-service';
+import { AuthService } from '../providers/auth-service';
 import { Storage } from '@ionic/storage';
 import {Contacts, ContactFindOptions, ContactFieldType} from "ionic-native";
 
 
 @Component({
     templateUrl: 'app.html',
-    providers: [StateService, AreaCode, Storage, Auth]
+    providers: [StateService, AreaCodeService, Storage, AuthService]
 })
 export class MyApp {
     rootPage = TabsPage;
     public states: any;
     public area_codes: any;
 
-    constructor(platform: Platform, public stateService: StateService, public storage: Storage, public areaCode: AreaCode) {
+    constructor(platform: Platform, public stateService: StateService, public storage: Storage, public areaCodeService: AreaCodeService) {
         console.log("MyApp:constructor");
         platform.ready().then(() => {
             console.log("MyApp:paltform.ready");
@@ -32,7 +32,7 @@ export class MyApp {
                     this.storage.set(this.states[i].name,JSON.stringify(this.states[i]));
                     this.storage.set(this.states[i].abbreviation,JSON.stringify(this.states[i]));
                 }
-                this.areaCode.load().then(data => {
+                this.areaCodeService.load().then(data => {
                     console.log("Processing area codes");
                     this.area_codes = data;
                     for (var i=0; i<this.area_codes.length; i++){

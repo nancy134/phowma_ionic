@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Auth } from '../providers/auth';
+import { AuthService } from '../providers/auth-service';
 
 /*
   Generated class for the ContactService provider.
@@ -13,7 +13,7 @@ import { Auth } from '../providers/auth';
 export class ContactService {
     public data: any;
 
-    constructor(public http: Http, public auth: Auth) {
+    constructor(public http: Http, public authService: AuthService) {
         console.log('Hello ContactService Provider');
     }
     contacts() {
@@ -28,11 +28,11 @@ export class ContactService {
             // then on the response, it'll map the JSON data to a parsed JS object.
             // Next, we process the data and resolve the promise with the new data.
             //var headers = this.auth.getHeaders();
-            this.auth.getHeaders2().then((headers) => {
+            this.authService.getHeaders2().then((headers) => {
                 this.http.get('http://dev.phowma.com/api/v1/contacts',{headers:headers})
                 .map(res => {
                     console.log("res: "+JSON.stringify(res));
-                    this.auth.storeHeaders(res.headers);
+                    this.authService.storeHeaders(res.headers);
                     console.log("res.text: "+res.text());
                     return res.json();
                 })

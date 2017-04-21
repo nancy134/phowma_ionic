@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Account } from '../../providers/account';
+import { AccountService } from '../../providers/account-service';
 import { ContactService } from '../../providers/contact-service';
 
 /*
@@ -12,7 +12,7 @@ import { ContactService } from '../../providers/contact-service';
 @Component({
     selector: 'page-account',
     templateUrl: 'account.html',
-    providers: [Account, ContactService]
+    providers: [AccountService, ContactService]
 })
 export class AccountPage {
     public showRegister: boolean = false;
@@ -20,14 +20,20 @@ export class AccountPage {
     public signedIn: boolean = false;
     signin_params = {}
     register_params = {}
-    constructor(public navCtrl: NavController, public navParams: NavParams, public account: Account, public contactService: ContactService) {}
+    constructor(public navCtrl: NavController, public navParams: NavParams, public accountService: AccountService, public contactService: ContactService) {}
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad AccountPage');
     }
     signIn(){
         console.log("Sign In Clicked");
-        this.account.signin().then(data => {
+        this.accountService.signin().then(data => {
+            console.log("data: "+JSON.stringify(data));
+        });
+    }
+    signInAdmin(){
+        console.log("Sign Admin In Clicked");
+        this.accountService.signinAdmin().then(data => {
             console.log("data: "+JSON.stringify(data));
         });
     }
