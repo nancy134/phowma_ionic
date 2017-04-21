@@ -5,13 +5,14 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import { TabsPage } from '../pages/tabs/tabs';
 import { StateService } from '../providers/state-service';
 import { AreaCode } from '../providers/area-code';
+import { Auth } from '../providers/auth';
 import { Storage } from '@ionic/storage';
 import {Contacts, ContactFindOptions, ContactFieldType} from "ionic-native";
 
 
 @Component({
     templateUrl: 'app.html',
-    providers: [StateService, AreaCode, Storage]
+    providers: [StateService, AreaCode, Storage, Auth]
 })
 export class MyApp {
     rootPage = TabsPage;

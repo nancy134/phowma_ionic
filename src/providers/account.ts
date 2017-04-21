@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Auth } from '../providers/auth';
+
 
 /*
   Generated class for the Account provider.
@@ -13,7 +15,7 @@ export class Account {
     public data: any;
     public headers: any;
 
-    constructor(public http: Http) {
+    constructor(public http: Http, public auth: Auth) {
         console.log('Hello Account Provider');
         this.data = null;
     }
@@ -33,9 +35,10 @@ export class Account {
             var data = "email=nancy_piedra@yahoo.com&password=tweety123";
             var headers = new Headers();
             headers.append('Content-Type', 'application/x-www-form-urlencoded');
-            this.http.post('http://dev.phowma.com/api/v1/admin_auth/sign_in',data,{headers: headers})
+            this.http.post('http://dev.phowma.com/api/v1/auth/sign_in',data,{headers: headers})
             .map(res => {
                 console.log("res: "+JSON.stringify(res));
+                this.auth.storeHeaders(res.headers);
                 console.log("res.headers.get.client: "+res.headers.get("client"));
                 console.log("res.headers.get.access-token: "+res.headers.get("access-token"));
                 console.log("res.headers.get.token-type: "+res.headers.get("token-type"));
