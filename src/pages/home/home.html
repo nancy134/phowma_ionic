@@ -5,14 +5,27 @@
 </ion-header>
 
 <ion-content padding>
-    <h2>Welcome to Ionic!</h2>
-    <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-    </p>
-    <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-    </p>
-    <button ion-button (click)="signIn()">Sign In</button>
+    <h2>Don't know your Representative?</h2>
+    <p>Don't worry, you're not alone.</p>
+    <p>Enter your your home address below to find your congressman/woman and congressional district.</p>
+        <form [formGroup]="districtForm">
+    <ion-list>
+
+  <ion-item>
+    <ion-input type="text" formControlName="address" placeholder="Address"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input type="text" formControlName="city" placeholder="City"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input type="text" formControlName="state" placeholder="State"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input type="text" formControlName="zip" placeholder="Zip"></ion-input>
+  </ion-item>
+
+</ion-list>
+
+    <button ion-button (click)="findDistrict()">Find Representative</button>
+    </form>
 </ion-content>

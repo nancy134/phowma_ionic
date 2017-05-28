@@ -4,17 +4,20 @@ import { HomePage } from '../home/home';
 import { AccountPage } from '../account/account';
 import { ContactPage } from '../contact/contact';
 import { ElectionPage } from '../election/election';
+import { PoliticiansPage } from '../politicians/politicians';
+import { Storage } from '@ionic/storage';
 
 @Component({
-    templateUrl: 'tabs.html'
+    templateUrl: 'tabs.html',
+    providers: [Storage]
 })
 export class TabsPage {
     // this tells the tabs component which Pages
     // should be each tab's root Page
-    tab1Root: any = HomePage;
-    tab2Root: any = AccountPage;
-    tab3Root: any = ContactPage;
-    tab4Root: any = ElectionPage;
+    tab1Root: any = AccountPage;
+    tab2Root: any = ContactPage;
+    tab3Root: any = PoliticiansPage;
+    tab4Root: any = HomePage;
 
     constructor() {
         console.log("TabsPage:constructor");

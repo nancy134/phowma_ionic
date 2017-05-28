@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { AuthService } from '../providers/auth-service';
+import { NetworkService } from '../providers/network-service';
+import { Contacts, ContactFindOptions, ContactFieldType} from "ionic-native";
 
 /*
   Generated class for the ContactService provider.
@@ -11,39 +13,86 @@ import { AuthService } from '../providers/auth-service';
 */
 @Injectable()
 export class ContactService {
-    public data: any;
 
-    constructor(public http: Http, public authService: AuthService) {
-        console.log('Hello ContactService Provider');
+    constructor(public http: Http, public authService: AuthService, public networkService: NetworkService) {
+        console.log('ContactService constructor');
     }
-    contacts() {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data).catch(e => console.error(e)); 
-        }
-
-        // don't have the data yet
-        return new Promise(resolve => {
-            // We're using Angular HTTP provider to request the data,
-            // then on the response, it'll map the JSON data to a parsed JS object.
-            // Next, we process the data and resolve the promise with the new data.
-            //var headers = this.auth.getHeaders();
-            this.authService.getHeaders2().then((headers) => {
-                this.http.get('http://dev.phowma.com/api/v1/contacts',{headers:headers})
-                .map(res => {
-                    console.log("res: "+JSON.stringify(res));
-                    this.authService.storeHeaders(res.headers);
-                    console.log("res.text: "+res.text());
-                    return res.json();
-                })
-                .subscribe(data => {
-                    // we've got back the raw data, now generate the core schedule data
-                    // and save the data for later reference
-                    this.data = data;
-                    console.log("data: "+JSON.stringify(data));
-                    resolve(this.data);
+    contacts(url) {
+        var networkService = this.networkService;
+        return new Promise(
+            function (resolve, reject) {
+                
+                networkService.get(url).then(
+                data => {
+                    resolve(data);
+                },
+                err => {
+                    reject(err);
                 });
-            });
-        }).catch(e => console.error(e)); 
+            }
+        )
+    }
+    all() {
+        var ids = [];
+        var getContactIds = new Promise(
+            function (resolve, reject) {
+                const options = new ContactFindOptions();
+                options.filter = '';
+                options.multiple = true;
+                options.hasPhoneNumber = false;
+                const desiredFields: ContactFieldType[] = ['id'];
+                options.desiredFields = desiredFields; 
+                const fields: ContactFieldType[] = ['id'];
+                Contacts.find(fields, options).then(
+                contacts => {
+                    for (let i=0; i<contacts.length; i++){
+                        ids.push(contacts[i].id);
+                    }
+                    resolve(ids);
+                },
+                error => {
+                    reject('getContact error');
+                });
+            }
+        );
+        //var as = this.authService;
+        var networkService = this.networkService;
+        //var h = this.http;
+        var allPost = function (ids) {
+            return new Promise(
+                function (resolve, reject) {
+                    var bodyData = {};
+                    bodyData['ids'] = [];
+                    for (let i=0; i<ids.length; i++){
+                        bodyData['ids'].push(ids[i]);
+                    }
+                    var data = JSON.stringify(bodyData);
+                    console.log("phone_ids: "+data);
+                    var url = 'http://dev.phowma.com/api/v1/contacts/all';
+        
+                    networkService.post(url, bodyData).then(
+                    data => {
+                        //this.tab.select(1);
+                        resolve(data);
+                    },
+                    err => {
+                        reject(err);
+                    });
+                }
+            );
+        };        
+        
+        return new Promise(
+            function (resolve, reject) {
+                getContactIds
+                .then(allPost) // chain it here
+                .then(function (fulfilled) {
+                    resolve(fulfilled);
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+            }
+        );
     }
 }

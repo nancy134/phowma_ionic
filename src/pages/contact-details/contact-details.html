@@ -8,11 +8,42 @@
 </ion-header>
 
 <ion-content>
-  <h3 text-center *ngIf="selectedItem">
-    {{selectedItem.name}}
-    <ion-icon [name]="selectedItem.icon"></ion-icon>
-  </h3>
-  <h4 text-center *ngIf="selectedItem">
-    You navigated here from <b>{{selectedItem.name}}</b>
-  </h4>
+  <ion-list>
+  <ion-item>
+    <ion-avatar item-left>
+      <img src="img/avatar-finn.png">
+    </ion-avatar>
+    <h2>{{selectedItem.displayName}}</h2>
+    <h3>{{selectedItem.phoneNumber}}</h3>
+    <p>{{selectedItem.addres}}</p>
+    <p>{{selectedItem.city}}, {{selectedItem.state}} {{selectedItem.zip}}</p>
+  </ion-item>
+  <ion-list-header>Senators</ion-list-header>
+  <ion-item>
+    <ion-avatar item-left>
+      <img src="http://bioguide.congress.gov/bioguide/photo/M/M000133.jpg">
+    </ion-avatar>
+    <h2>Bill Cassidy</h2>
+    <h3>Republican</h3>
+  </ion-item>
+  <ion-item>
+    <ion-avatar item-left>
+      <img src="http://bioguide.congress.gov/bioguide/photo/M/M000133.jpg">
+    </ion-avatar>
+    <h2>John Kennedy</h2>
+    <h3>Republican</h3>
+  </ion-item>
+  <ion-list-header>Governor</ion-list-header>
+  <ion-item>
+    <ion-avatar item-left>
+      <img src="http://bioguide.congress.gov/bioguide/photo/M/M000133.jpg">
+    </ion-avatar>
+    <h2>John Bel Edwards</h2>
+    <h3>Democrat</h3>
+  </ion-item>
+  <ion-list-header>Representative</ion-list-header>
+  <ion-item>
+    <p>Need address to determine representative</p>
+  </ion-item>
+</ion-list>
 </ion-content>

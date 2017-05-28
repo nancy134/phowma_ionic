@@ -10,31 +10,26 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class AreaCodeService {
-  public data: any;
+    public data: any;
+    public url: any;
+    public req: any;
 
-  constructor(public http: Http) {
-    console.log('Hello AreaCode Provider');
-    this.http = http;
-    this.data = null;
-  }
-    load() {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data).catch(e => console.error(e)); 
-        }
-
-        // don't have the data yet
+    constructor(public http: Http) {
+        console.log('AreaCodeService constructure');
+        this.http = http;
+        this.url = 'http://dev.phowma.com/api/v1/area_codes';
+    }
+    loadByCode(code) {
         return new Promise(resolve => {
-            // We're using Angular HTTP provider to request the data,
-            // then on the response, it'll map the JSON data to a parsed JS object.
-            // Next, we process the data and resolve the promise with the new data.
-            this.http.get('http://dev.phowma.com/api/v1/area_codes')
+            if (code){
+                this.req = this.url+'?code='+code;
+            } else {
+                this.req = this.url;
+            }
+            this.http.get(this.req)
             .map(res => res.json())
             .subscribe(data => {
-                // we've got back the raw data, now generate the core schedule data
-                // and save the data for later reference
-                this.data = data;
-                resolve(this.data);
+                resolve(data);
             });
         }).catch(e => console.error(e)); 
     }
