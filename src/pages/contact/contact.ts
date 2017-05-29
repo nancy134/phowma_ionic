@@ -7,6 +7,7 @@ import { StateService} from '../../providers/state-service';
 import { ContactService } from '../../providers/contact-service';
 import { AccountService} from '../../providers/account-service';
 import { NetworkService} from '../../providers/network-service';
+import { PoliticianService } from '../../providers/politician-service';
 import { Storage } from '@ionic/storage';
 import { parse} from 'libphonenumber-js';
 import { AreaCodeService } from '../../providers/area-code-service';
@@ -14,7 +15,7 @@ import { AreaCodeService } from '../../providers/area-code-service';
 @Component({
   selector: 'page-contact',
   templateUrl: 'contact.html',
-  providers: [StateService, Storage, AccountService, AreaCodeService, ContactService, NetworkService]
+  providers: [StateService, Storage, AccountService, AreaCodeService, ContactService, NetworkService, PoliticianService]
 })
 export class ContactPage {
     tab: Tabs;
@@ -30,6 +31,9 @@ export class ContactPage {
         city: string,
         state: string,
         zip: string,
+        senator1 : any,
+        senator2 : any,
+        governor : any,
         icon1: string, 
         icon2: string, 
         icon3: string, 
@@ -55,6 +59,7 @@ export class ContactPage {
         public contactService: ContactService,
         public areaCodeService: AreaCodeService, 
         public networkService: NetworkService, 
+        public politicianService: PoliticianService, 
         public accountService: AccountService) {
         // If we navigated to this page, we will have an item available as a nav param
         //this.selectedItem = navParams.get('item');
@@ -63,9 +68,55 @@ export class ContactPage {
         this.items = [];
     }
     itemTapped(event, item) {
-        this.navCtrl.push(ContactDetailsPage, {
-            item: item
+        this.politicianService.loadAll(1,item.state).then(
+            data => {
+                var firstSenator = false;
+                for (let i = 0; i < data["response"]["data"].length; i++) {
+                    var politician = data["response"]["data"][i];
+                    console.log("first_name: "+politician.first_name);
+                    if (politician.position.indexOf("governor") == 0){
+                        item.governor = {};
+                        item.governor["first_name"] = politician.first_name;
+                        item.governor["last_name"] = politician.last_name;
+                        item.governor["party"] = politician.party;
+                    }
+                    if (politician.position.indexOf("senator") == 0){
+                        if (!firstSenator){
+                            item.senator1 = {};
+                            item.senator1["first_name"] = politician.first_name;
+                            item.senator1["last_name"] = politician.last_name;
+                            item.senator1["party"] = politician.party;
+                            firstSenator = true;
+                        } else {
+                            item.senator2 = {};
+                            item.senator2["first_name"] = politician.first_name;
+                            item.senator2["last_name"] = politician.last_name;
+                            item.senator2["party"] = politician.party;
+                        }
+                        
+                    }
+                }
+                this.navCtrl.push(ContactDetailsPage, {
+                    item: item
+                });
+            /*
+            console.log("PoliticiansPage data: "+JSON.stringify(data["response"]["data"]));
+            console.log("PoliticiansPage data.length: "+data["response"]["data"].length);
+            this.governor = {};
+            for (let i = 0; i < data["response"]["data"].length; i++) {
+                var item = data["response"]["data"][0];
+                console.log("first_name: "+item.first_name);
+                if (item.position.indexOf("governor") == 0){
+                    this.governor["first_name"] = item.first_name;
+                }
+            }
+            ++this.page;
+            */
+            },
+            err => {
+                console.log("PoliticiansPage err: "+err);
         });
+
     }
     ionViewWillEnter() {
         console.log("ionviewwillenter");
@@ -214,6 +265,9 @@ export class ContactPage {
             city: city,
             state: state,
             zip: zip,
+            governor: {},
+            senator1: {},
+            senator2: {},
             icon1: i1, icon2: i2, icon3: i3, icon4: i4, icon5: 'star-outline',
             color1: c1, color2: c2, color3: c3, color4: c4, color5: 'black' 
         });
@@ -226,6 +280,8 @@ export class ContactPage {
         this.contactService.contacts( 'http://dev.phowma.com/api/v1/contacts/?page=1').then(data => {
             var responseData = data["response"]["data"];
             var headers = data["response"]["headers"];
+            console.log(JSON.stringify(headers));
+            console.log("link: "+headers.get("Link"));
             this.parseLinkHeader(headers.get("Link"));
             var length = Object.keys(responseData).length;
             for (var i=0; i<length; i++){
@@ -295,6 +351,7 @@ export class ContactPage {
             data => {
                 var headers = data["response"]["headers"];
                 var responseData = data["response"]["data"];
+                console.log("link: "+headers.get("Link"));
                 this.parseLinkHeader(headers.get("Link"));
                 var phone_ids = [];
                 var length = Object.keys(responseData).length;
@@ -318,6 +375,7 @@ export class ContactPage {
         }, 500);
     }
 parseLinkHeader(link) {
+    if (!link) return;
     var linkexp = /<[^>]*>\s*(\s*;\s*[^\(\)<>@,;:"\/\[\]\?={} \t]+=(([^\(\)<>@,;:"\/\[\]\?={} \t]+)|("[^"]*")))*(,|$)/g;
     var paramexp = /[^\(\)<>@,;:"\/\[\]\?={} \t]+=(([^\(\)<>@,;:"\/\[\]\?={} \t]+)|("[^"]*"))/g;
 

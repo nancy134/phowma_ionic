@@ -28,14 +28,18 @@ export class PoliticianService {
             });
         }).catch(e => console.error(e)); 
     }
-    loadAll(page) {
+    loadAll(page,state) {
         var networkService = this.networkService;
         return new Promise(
             function (resolve, reject) {
                 
                 var url = 'http://dev.phowma.com/api/v1/politicians?page='+page;
+                if (state){
+                    url = 'http://dev.phowma.com/api/v1/politicians?page='+page+"&state="+state;
+                }
                 networkService.get(url).then(
                 data => {
+                    console.log("politician-service data: "+JSON.stringify(data));
                     resolve(data);
                 },
                 err => {

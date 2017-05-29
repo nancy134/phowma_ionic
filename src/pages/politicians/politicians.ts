@@ -11,10 +11,11 @@ import { NavController } from 'ionic-angular';
 export class PoliticiansPage {
     items = [];
     page = 1;
+    
     constructor(public navCtrl: NavController,
     public politicianService: PoliticianService) {
         
-        this.politicianService.loadAll(this.page).then(
+        this.politicianService.loadAll(this.page,null).then(
         data => {
             console.log("PoliticiansPage data: "+JSON.stringify(data["response"]["data"]));
             console.log("PoliticiansPage data.length: "+data["response"]["data"].length);
@@ -36,7 +37,7 @@ export class PoliticiansPage {
             //for (let i = 0; i < 30; i++) {
             //    this.items.push( this.items.length );
             //}
-            this.politicianService.loadAll(this.page).then(
+            this.politicianService.loadAll(this.page,null).then(
             data => {
                 console.log("PoliticiansPage data: "+JSON.stringify(data["response"]["data"]));
                 console.log("PoliticiansPage data.length: "+data["response"]["data"].length);
