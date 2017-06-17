@@ -18,6 +18,7 @@ export class TabsPage {
     tab2Root: any = ContactPage;
     tab3Root: any = PoliticiansPage;
     tab4Root: any = HomePage;
+    tab5Root: any = ElectionPage;
 
     constructor() {
         console.log("TabsPage:constructor");

@@ -34,6 +34,7 @@ export class ContactPage {
         senator1 : any,
         senator2 : any,
         governor : any,
+        congressmen : any,
         icon1: string, 
         icon2: string, 
         icon3: string, 
@@ -71,14 +72,16 @@ export class ContactPage {
         this.politicianService.loadAll(1,item.state).then(
             data => {
                 var firstSenator = false;
+                var firstCongressman = true;
                 for (let i = 0; i < data["response"]["data"].length; i++) {
                     var politician = data["response"]["data"][i];
-                    console.log("first_name: "+politician.first_name);
+                    
                     if (politician.position.indexOf("governor") == 0){
                         item.governor = {};
                         item.governor["first_name"] = politician.first_name;
                         item.governor["last_name"] = politician.last_name;
                         item.governor["party"] = politician.party;
+                        item.governor["picture"] = politician.picture;
                     }
                     if (politician.position.indexOf("senator") == 0){
                         if (!firstSenator){
@@ -86,32 +89,38 @@ export class ContactPage {
                             item.senator1["first_name"] = politician.first_name;
                             item.senator1["last_name"] = politician.last_name;
                             item.senator1["party"] = politician.party;
+                            item.senator1["picture"] = politician.picture;
                             firstSenator = true;
                         } else {
                             item.senator2 = {};
                             item.senator2["first_name"] = politician.first_name;
                             item.senator2["last_name"] = politician.last_name;
                             item.senator2["party"] = politician.party;
+                            item.senator2["picture"] = politician.picture;
                         }
-                        
+                    }
+                    if (politician.position.indexOf("congressman") == 0){
+                        if (firstCongressman){ 
+                            item.congressmen = [];
+                            firstCongressman = false;
+                        }
+                        var congressman = {};
+                        congressman["first_name"] = politician.first_name;
+                        congressman["last_name"] = politician.last_name;
+                        congressman["party"] = politician.party;
+                        congressman["picture"] = politician.picture;
+                        if (politician.district){
+                            console.log("politician district: "+politician.district.number);
+                            congressman["district"] = politician.district.number
+                        }
+                        console.log("congressman[first_name]: "+congressman["first_name"]);
+                        console.log("congressman[district]: "+congressman["district"]);
+                        item.congressmen.push(congressman);
                     }
                 }
                 this.navCtrl.push(ContactDetailsPage, {
                     item: item
                 });
-            /*
-            console.log("PoliticiansPage data: "+JSON.stringify(data["response"]["data"]));
-            console.log("PoliticiansPage data.length: "+data["response"]["data"].length);
-            this.governor = {};
-            for (let i = 0; i < data["response"]["data"].length; i++) {
-                var item = data["response"]["data"][0];
-                console.log("first_name: "+item.first_name);
-                if (item.position.indexOf("governor") == 0){
-                    this.governor["first_name"] = item.first_name;
-                }
-            }
-            ++this.page;
-            */
             },
             err => {
                 console.log("PoliticiansPage err: "+err);
@@ -256,7 +265,9 @@ export class ContactPage {
             city = contact.addresses[0].locality;
             zip = contact.addresses[0].postalCode;
         }
-
+        if (!state){
+            state = stateData.abbreviation;
+        }
         this.items.push({
             name: contact.name.formatted+" ("+stateData.abbreviation+")",
             displayName: contact.displayName,
@@ -268,6 +279,7 @@ export class ContactPage {
             governor: {},
             senator1: {},
             senator2: {},
+            congressmen: [],
             icon1: i1, icon2: i2, icon3: i3, icon4: i4, icon5: 'star-outline',
             color1: c1, color2: c2, color3: c3, color4: c4, color5: 'black' 
         });
