@@ -8,7 +8,7 @@ import { parse} from 'libphonenumber-js';
 @Component({
   selector: 'page-contact-demo',
   templateUrl: 'contact-demo.html',
-  providers: [StateService, Storage]
+  providers: [StateService]
 })
 export class ContactDemoPage {
     tab: Tabs;

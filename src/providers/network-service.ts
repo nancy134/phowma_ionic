@@ -210,10 +210,12 @@ export class NetworkService {
         
                     a.get(url).then(
                     data => {
+						console.log("check data");
                         a.isSignedInFlag = true;
                         resolve(data);
                     },
                     err => {
+						console.log("check error");
                         reject(err);
                     });
                 }

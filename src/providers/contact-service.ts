@@ -33,9 +33,11 @@ export class ContactService {
         )
     }
     all() {
+		console.log("contact-service.all");
         var ids = [];
         var getContactIds = new Promise(
             function (resolve, reject) {
+				console.log("getcontactids");
                 const options = new ContactFindOptions();
                 options.filter = '';
                 options.multiple = true;
@@ -45,12 +47,14 @@ export class ContactService {
                 const fields: ContactFieldType[] = ['id'];
                 Contacts.find(fields, options).then(
                 contacts => {
+					console.log("contact.find success");
                     for (let i=0; i<contacts.length; i++){
                         ids.push(contacts[i].id);
                     }
                     resolve(ids);
                 },
                 error => {
+					console.log("contact.find error"+error);
                     reject('getContact error');
                 });
             }
@@ -61,6 +65,7 @@ export class ContactService {
         var allPost = function (ids) {
             return new Promise(
                 function (resolve, reject) {
+					console.log("allpost");
                     var bodyData = {};
                     bodyData['ids'] = [];
                     for (let i=0; i<ids.length; i++){

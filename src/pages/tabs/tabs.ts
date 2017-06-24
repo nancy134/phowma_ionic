@@ -5,11 +5,10 @@ import { AccountPage } from '../account/account';
 import { ContactPage } from '../contact/contact';
 import { ElectionPage } from '../election/election';
 import { PoliticiansPage } from '../politicians/politicians';
-import { Storage } from '@ionic/storage';
 
 @Component({
     templateUrl: 'tabs.html',
-    providers: [Storage]
+    providers: []
 })
 export class TabsPage {
     // this tells the tabs component which Pages

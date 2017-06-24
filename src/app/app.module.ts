@@ -11,6 +11,8 @@ import { PoliticiansPage } from '../pages/politicians/politicians';
 import { AccountPage } from '../pages/account/account';
 import { TabsPage } from '../pages/tabs/tabs';
 import { IonicStorageModule } from '@ionic/storage';
+import { HttpModule } from '@angular/http';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { IonicStorageModule } from '@ionic/storage';
     TabsPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp),
+    HttpModule,
+	BrowserModule,
+	IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
     ],
   bootstrap: [IonicApp],
@@ -42,6 +46,6 @@ import { IonicStorageModule } from '@ionic/storage';
     AccountPage,
     TabsPage
   ],
-  providers: [Storage, {provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}

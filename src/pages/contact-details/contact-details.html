@@ -8,47 +8,53 @@
 </ion-header>
 
 <ion-content>
-    <ion-list no-lines>
-        <ion-list-header no-lines>Contact</ion-list-header>
+    <ion-list >
+        <ion-list-header>Contact</ion-list-header>
         <ion-item>
             <h2>{{selectedItem.displayName}}</h2>
             <h3>{{selectedItem.phoneNumber}}</h3>
             <p>{{selectedItem.addres}}</p>
             <p>{{selectedItem.city}}, {{selectedItem.state}} {{selectedItem.zip}}</p>
         </ion-item>
+    </ion-list >
+    <ion-list >
         <ion-list-header>Representative</ion-list-header>
         <ion-item *ngIf="hasRepresentative==false">
             <p>Need address to determine representative</p>
         </ion-item>
         <ion-item *ngIf="hasRepresentative==true">
-            <ion-avatar item-left>
+            <ion-avatar item-start>
                 <img [src]="congressman.picture">
             </ion-avatar>
             <h2>{{congressman.first_name}} {{congressman.last_name}}</h2>
             <h3>{{congressman.party}}</h3>
         </ion-item>
+    </ion-list >
+    <ion-list >
         <ion-list-header>Senators</ion-list-header>
         <ion-item>
-            <ion-avatar item-left>
+            <ion-avatar item-start>
                 <img [src]="selectedItem.senator1.picture">
             </ion-avatar>
             <h2>{{selectedItem.senator1.first_name}} {{selectedItem.senator1.last_name}}</h2>
             <h3>{{selectedItem.senator1.party}}</h3>
         </ion-item>
         <ion-item>
-            <ion-avatar item-left>
+            <ion-thumbnail item-start>
                 <img [src]="selectedItem.senator2.picture">
-            </ion-avatar>
+            </ion-thumbnail>
             <h2>{{selectedItem.senator2.first_name}} {{selectedItem.senator2.last_name}}</h2>
             <h3>{{selectedItem.senator2.party}}</h3>
         </ion-item>
-    <ion-list-header>Governor</ion-list-header>
-    <ion-item>
-        <ion-avatar item-left>
-            <img [src]="selectedItem.governor.picture">
-        </ion-avatar>
-        <h2>{{selectedItem.governor.first_name}} {{selectedItem.governor.last_name}}</h2>
-        <h3>{{selectedItem.governor.party}}</h3>
-    </ion-item>
+    </ion-list >
+    <ion-list >
+		<ion-list-header>Governor</ion-list-header>
+		<ion-item>
+			<ion-avatar item-start>
+				<img [src]="selectedItem.governor.picture">
+			</ion-avatar>
+			<h2>{{selectedItem.governor.first_name}} {{selectedItem.governor.last_name}}</h2>
+			<h3>{{selectedItem.governor.party}}</h3>
+		</ion-item>
     </ion-list>
 </ion-content>

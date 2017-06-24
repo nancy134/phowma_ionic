@@ -8,14 +8,13 @@ import { ContactService } from '../../providers/contact-service';
 import { AccountService} from '../../providers/account-service';
 import { NetworkService} from '../../providers/network-service';
 import { PoliticianService } from '../../providers/politician-service';
-import { Storage } from '@ionic/storage';
 import { parse} from 'libphonenumber-js';
 import { AreaCodeService } from '../../providers/area-code-service';
 
 @Component({
   selector: 'page-contact',
   templateUrl: 'contact.html',
-  providers: [StateService, Storage, AccountService, AreaCodeService, ContactService, NetworkService, PoliticianService]
+  providers: [StateService, AccountService, AreaCodeService, ContactService, NetworkService, PoliticianService]
 })
 export class ContactPage {
     tab: Tabs;
@@ -56,7 +55,6 @@ export class ContactPage {
         public navCtrl: NavController,
         public navParams: NavParams, 
         public stateService: StateService,
-        public storage: Storage, 
         public contactService: ContactService,
         public areaCodeService: AreaCodeService, 
         public networkService: NetworkService, 
@@ -130,13 +128,18 @@ export class ContactPage {
     ionViewWillEnter() {
         console.log("ionviewwillenter");
         this.platform.ready().then(() => {
+			console.log("platform.ready()");
             this.networkService.isSignedIn().then(data => {
+				console.log("isSignedIn()");
                 if ((data["response"]["data"]["status"].localeCompare("ok") == 0) && this.isSignedIn == false){
+					console.log("true");
                     this.isSignedIn = true;
                     this.contactService.all().then(data => {
+						console.log("contactService.all()");
                         this.getContactsFromServer();
                     });
                 }else if ((data["response"]["data"]["status"].localeCompare("ok") != 0) && this.isSignedIn == true){
+					console.log("false");
                     this.isSignedIn = false;
                     this.getContacts();
                 }
@@ -290,6 +293,7 @@ export class ContactPage {
         phone_ids = [];
        
         this.contactService.contacts( 'http://dev.phowma.com/api/v1/contacts/?page=1').then(data => {
+			console.log("contactService.contacts");
             var responseData = data["response"]["data"];
             var headers = data["response"]["headers"];
             console.log(JSON.stringify(headers));
