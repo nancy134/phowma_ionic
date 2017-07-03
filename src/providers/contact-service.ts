@@ -100,4 +100,127 @@ export class ContactService {
             }
         );
     }
+    /*
+	public syncAll(){
+        var ids = [];
+    	console.log("syncAll()");
+        const options = new ContactFindOptions();
+        options.filter = '';
+        options.multiple = true;
+        options.hasPhoneNumber = false;
+        const desiredFields: ContactFieldType[] = ['id'];
+        options.desiredFields = desiredFields; 
+        const fields: ContactFieldType[] = ['id'];
+        Contacts.find(fields, options).then(
+        contacts => {
+            console.log("syncAll() contact.find success");
+            for (let i=0; i<contacts.length; i++){
+                ids.push(contacts[i].id);
+            }
+			this.sync(ids);
+        },
+        error => {
+			console.log("syncAll() contact.find error"+error);
+        });
+	}
+	*/
+    public sync(){
+		console.log("sync()");
+		
+        var ids = [];
+        var getContactIds = new Promise(
+            function (resolve, reject) {
+				console.log("getcontactids");
+                const options = new ContactFindOptions();
+                options.filter = '';
+                options.multiple = true;
+                options.hasPhoneNumber = false;
+                const desiredFields: ContactFieldType[] = ['id'];
+                options.desiredFields = desiredFields; 
+                const fields: ContactFieldType[] = ['id'];
+                Contacts.find(fields, options).then(
+                contacts => {
+					console.log("contact.find success");
+                    for (let i=0; i<contacts.length; i++){
+                        ids.push(contacts[i].id);
+                    }
+                    resolve(ids);
+                },
+                error => {
+					console.log("contact.find error"+error);
+                    reject('getContact error');
+                });
+            }
+        );
+		
+		var networkService = this.networkService;
+        var postToServer = function(e) {
+			return new Promise(
+				function (resolve, reject) {
+					console.log("sync() postToServer()");
+					const options = new ContactFindOptions();
+					options.filter = e;
+					options.multiple = false;
+					options.hasPhoneNumber = false;
+					const desiredFields: ContactFieldType[] = ['id', 'name', 'addresses', 'phoneNumbers'];
+					options.desiredFields = desiredFields; 
+					const fields: ContactFieldType[] = ['id'];
+					Contacts.find(fields, options).then(contacts => {
+						console.log("sync() contacts.find()");
+						var bodyData = {};
+						bodyData['phone_id'] = contacts[0].id;
+						console.log("sync() bodyData: "+JSON.stringify(bodyData));
+						var url = 'http://dev.phowma.com/api/v1/contacts/test';
+						networkService.post(url, bodyData).then(data => {
+							console.log("sync() networkswervice.post() data: "+JSON.stringify(data));
+							resolve(data);
+						},
+						err => {
+							console.log("sync() networkswervice.post() error");
+							reject(err);
+						});
+					},
+					err => {
+						reject("Error");
+					});
+				}
+			);
+		}
+
+        var abcd = [];
+        var workMyCollection = (ids) => {
+            return ids.reduce((promise, item) => {
+				console.log("ids.reduce() 1");
+                return promise.then((result) => {
+					console.log("ids.reduce() 2");
+                    return postToServer(item).then(result => abcd.push(result));
+                })
+                .catch(console.error);
+            }, Promise.resolve());
+        }
+		
+		
+		/*
+        return new Promise(
+            function (resolve, reject) {
+				workMyCollection(phone_ids).then(() => {
+					console.log("workMyCollection()");
+					resolve(abcd);
+				});
+			}
+		);
+		*/
+        return new Promise(
+            function (resolve, reject) {
+				getContactIds
+				.then(workMyCollection)
+				.then(() => {
+					console.log("workMyCollection()");
+					resolve(abcd);
+				});
+			}
+		);
+    }
 }
+
+

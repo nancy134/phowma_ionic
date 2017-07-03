@@ -22,6 +22,7 @@ export class AccountPage {
     public showSignIn: boolean = true;
     public showSignOut: boolean = false;
     public signedIn: boolean = false;
+	public syncing: boolean = false;
     public email: any;
     tab: Tabs;
     
@@ -92,4 +93,14 @@ export class AccountPage {
         this.showSignIn = false;
         this.showSignOut = true;
     }
+    sync(){
+		this.syncing = true;
+		this.contactService.sync().then(
+		data => {
+			this.syncing = false;
+		},
+		err => {
+			this.syncing = false;
+		});
+	}
 }

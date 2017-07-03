@@ -10,46 +10,38 @@ import { NavController } from 'ionic-angular';
 })
 export class PoliticiansPage {
     items = [];
+	states = [];
     page = 1;
     
     constructor(public navCtrl: NavController,
     public politicianService: PoliticianService) {
-        
-        this.politicianService.loadAll(this.page,null).then(
+        this.politicianService.loadByState(this.page).then(
         data => {
-            console.log("PoliticiansPage data: "+JSON.stringify(data["response"]["data"]));
-            console.log("PoliticiansPage data.length: "+data["response"]["data"].length);
             for (let i = 0; i < data["response"]["data"].length; i++) {
-                //this.items.push( this.items.length );
-                this.items.push( data["response"]["data"][i].last_name);
+                this.states.push( data["response"]["data"][i]);
             }
             ++this.page;
         },
         err => {
             console.log("PoliticiansPage err: "+err);
         });
-        
+
     }    
     doInfinite(infiniteScroll) {
         console.log('Begin async operation');
 
         setTimeout(() => {
-            //for (let i = 0; i < 30; i++) {
-            //    this.items.push( this.items.length );
-            //}
-            this.politicianService.loadAll(this.page,null).then(
-            data => {
-                console.log("PoliticiansPage data: "+JSON.stringify(data["response"]["data"]));
-                console.log("PoliticiansPage data.length: "+data["response"]["data"].length);
-                for (let i = 0; i < data["response"]["data"].length; i++) {
-                    //this.items.push( this.items.length );
-                    this.items.push( data["response"]["data"][i].last_name);
-                }
-                ++this.page;
-            },
-            err => {
-                console.log("PoliticiansPage err: "+err);
-            });
+			this.politicianService.loadByState(this.page).then(
+			data => {
+				for (let i = 0; i < data["response"]["data"].length; i++) {
+					this.states.push( data["response"]["data"][i]);
+				}
+				++this.page;
+			},
+			err => {
+				console.log("PoliticiansPage err: "+err);
+			});
+
 
             console.log('Async operation has ended');
             infiniteScroll.complete();

@@ -66,6 +66,9 @@
         <ion-row>
             <ion-col col-12><button ion-button clear (click)="onShowSignOut()">Sign Out</button></ion-col>
         </ion-row>
+        <ion-row>
+            <ion-col col-12><button ion-button clear (click)="sync()">Sync</button></ion-col>
+        </ion-row>
     </ion-grid>
       <ion-list>
   <ion-item>
@@ -105,5 +108,5 @@
     <p>Need address to determine representative</p>
   </ion-item>
 </ion-list>
-
+<ion-spinner *ngIf="syncing"></ion-spinner>
 </ion-content>
