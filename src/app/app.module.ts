@@ -5,6 +5,7 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { ContactDemoPage } from '../pages/contact-demo/contact-demo';
 import { ContactDetailsPage } from '../pages/contact-details/contact-details';
+import { PoliticianDetails } from '../pages/politician-details/politician-details';
 import { HomePage } from '../pages/home/home';
 import { ElectionPage } from '../pages/election/election';
 import { PoliticiansPage } from '../pages/politicians/politicians';
@@ -21,6 +22,7 @@ import { BrowserModule } from '@angular/platform-browser';
     ContactPage,
     ContactDemoPage,
     ContactDetailsPage,
+    PoliticianDetails,
     HomePage,
     ElectionPage,
     PoliticiansPage,
@@ -40,6 +42,7 @@ import { BrowserModule } from '@angular/platform-browser';
     ContactPage,
     ContactDemoPage,
     ContactDetailsPage,
+    PoliticianDetails,
     HomePage,
     ElectionPage,
     PoliticiansPage,

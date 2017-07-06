@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { PoliticianService } from '../../providers/politician-service';
 import { NetworkService } from '../../providers/network-service';
 import { NavController } from 'ionic-angular';
+import { PoliticianDetails } from '../politician-details/politician-details';
 
 @Component({
     selector: 'page-politicians',
@@ -48,4 +49,8 @@ export class PoliticiansPage {
         }, 500);
     }
     
+    itemTapped(event, politician) {
+        console.log("Politicians: itemTapped");
+        this.navCtrl.push(PoliticianDetails, {politician: politician});
+    }
 }
