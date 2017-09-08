@@ -45,6 +45,15 @@ export class StateService {
                 resolve(data);
             });
         }).catch(e => console.error(e)); 
-        
     }
+	loadList(){
+        return new Promise(resolve => {
+			this.req = this.url+'?type=min';
+            this.http.get(this.req)
+            .map(res => res.json())
+            .subscribe(data => {
+                resolve(data);
+            });
+        }).catch(e => console.error(e)); 
+	}
 }

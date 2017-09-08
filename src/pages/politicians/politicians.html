@@ -9,8 +9,14 @@
 <ion-content padding>
 
     <ion-item-group *ngFor="let state of states">
-        <ion-item-divider color="light">{{state.name}}</ion-item-divider>
-        <button ion-item *ngFor="let politician of state.politicians" (click)="itemTapped($event, politician)">{{politician.last_name}}</button>
+        <ion-item-divider color="light" (click)="stateTapped($event, state)">{{state.name}}</ion-item-divider>
+		<button ion-item *ngFor="let politician of state.politicians" (click)="itemTapped($event, politician)">
+			<ion-thumbnail item-start>
+				<img src="{{politician.avatar_thumb}}">
+			</ion-thumbnail>
+			<h2>{{politician.first_name}} {{politician.last_name}}</h2>
+			<p>{{politician.position}} {{politician.party}}</p>
+		</button>
     </ion-item-group>
 
  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">

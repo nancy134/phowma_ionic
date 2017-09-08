@@ -48,12 +48,16 @@ export class PoliticianService {
             }
         )
     }
-	loadByState(page){
+	loadByState(page,state){
         var networkService = this.networkService;
         return new Promise(
             function (resolve, reject) {
-                
-                var url = 'http://dev.phowma.com/api/v1/states?page='+page;
+				var url;
+                if (state) {
+					url = 'http://dev.phowma.com/api/v1/states?per_page=5&page='+page+"&abbreviation="+state;
+				}else{
+					url = 'http://dev.phowma.com/api/v1/states?per_page=5&page='+page;
+				}
                 networkService.get(url).then(
                 data => {
                     resolve(data);
