@@ -15,6 +15,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { AdMobFree } from '@ionic-native/admob-free';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { BrowserModule } from '@angular/platform-browser';
     AccountPage,
     TabsPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [AdMobFree,
+  {provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
 export class AppModule {}
